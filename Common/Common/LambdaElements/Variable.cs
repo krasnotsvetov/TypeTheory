@@ -45,7 +45,7 @@ namespace Common.LambdaElements
             if (!notation.ContainsKey(this))
             {
                 notation[this] = variableCount++;
-                return new Variable($"a{notation[this].ToString()}");
+                return new Variable("a" + notation[this].ToString());
             }
             return new Variable("a" + notation[this].ToString());
         }

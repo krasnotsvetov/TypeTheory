@@ -120,7 +120,7 @@ namespace Task_1
                 return new Application(s0 ?? application.Left, s1 ?? application.Right);
             }
 
-            throw new NotImplementedException($"{expr.GetType().Name} doesn't support subst");
+            throw new NotImplementedException(expr.GetType().Name + " doesn't support subst");
         }
 
         private LambdaExpression Rename(HashSet<Variable> variables, LambdaExpression expr)
@@ -173,7 +173,7 @@ namespace Task_1
                 }
             }
 
-            throw new NotImplementedException($"{expr.GetType().Name} doesn't support rename");
+            throw new NotImplementedException(expr.GetType().Name + " doesn't support rename");
         }
 
         private bool IsBetaRedecs(LambdaExpression expression)
@@ -198,10 +198,10 @@ namespace Task_1
                 reductionCount++;
                 if (reductionCount % 1000 == 0)
                 {
-                    Console.WriteLine($"Reduction count: {reductionCount}");
+                    Console.WriteLine("Reduction count: " + reductionCount);
                 }
             }
-            Console.WriteLine($"Reduction count: {reductionCount}");
+            Console.WriteLine("Reduction count: " + reductionCount);
             return current.GetNotation();
         }
     }

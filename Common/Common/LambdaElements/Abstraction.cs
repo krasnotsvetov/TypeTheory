@@ -21,7 +21,7 @@ namespace Common.LambdaElements
 
         public override string ToString()
         {
-            return $"(\\{Variable.Name}.({Expression.ToString()}))";
+            return "(\\" + Variable.Name + ".(" + Expression.ToString() + "))";
         }
 
         public override LambdaExpression GetNotation()
