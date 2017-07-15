@@ -25,7 +25,7 @@ namespace Task_2
                 }
                 catch (UnificatorUnresolvedExpection e)
                 {
-                    sw.WriteLine("The lambda expression has not got a type");
+                    sw.WriteLine("The lambda expression has no type");
                 }
             }
 

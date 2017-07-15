@@ -76,6 +76,7 @@
     <Compile Include="LambdaElements\Abstraction.cs" />
     <Compile Include="LambdaElements\Application.cs" />
     <Compile Include="LambdaElements\LambdaExpression.cs" />
+    <Compile Include="LambdaElements\LetExpression.cs" />
     <Compile Include="LambdaElements\Variable.cs" />
     <Compile Include="NumberConverter.cs" />
     <Compile Include="Program.cs" />

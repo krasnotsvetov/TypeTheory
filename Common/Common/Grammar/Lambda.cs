@@ -23,7 +23,7 @@ namespace Common.Grammar
             var lexer = new LambdaGrammarLexer(stream);
             var parser = new LambdaGrammarParser(new CommonTokenStream(lexer));
             var visitor = new LambdaTreeVisitor();
-            return visitor.Visit(parser.expression());
+            return visitor.Visit(parser.letExpression());
             
         }
 
@@ -32,6 +32,16 @@ namespace Common.Grammar
             public override LambdaExpression Visit(IParseTree tree)
             {
                 return base.Visit(tree);
+            }
+
+            public override LambdaExpression VisitLetExpression([NotNull] LambdaGrammarParser.LetExpressionContext context)
+            {
+                if (context.LET() != null)
+                {
+                    var letExprs = context.letExpression();
+                    return new LetExpression((Variable)VisitVariable(context.variable()), VisitLetExpression(letExprs[0]), VisitLetExpression(letExprs[1]));
+                }
+                else return VisitExpression(context.expression());
             }
 
             public override LambdaExpression VisitExpression([NotNull] LambdaGrammarParser.ExpressionContext context)
@@ -68,10 +78,10 @@ namespace Common.Grammar
 
             public override LambdaExpression VisitAtom([NotNull] LambdaGrammarParser.AtomContext context)
             {
-                var expr = context.expression();
+                var expr = context.letExpression();
                 if (expr != null)
                 {
-                    return VisitExpression(expr);
+                    return VisitLetExpression(expr);
                 } else
                 {
                     return VisitVariable(context.variable());
