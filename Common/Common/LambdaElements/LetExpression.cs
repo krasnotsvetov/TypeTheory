@@ -27,17 +27,18 @@ namespace Common.LambdaElements
 
         public override LambdaExpression GetNotation()
         {
-            throw new NotImplementedException();
+            int t = 0;
+            return _makeNotation(new Dictionary<Variable, int>(),ref t);
         }
 
         internal override LambdaExpression _makeNotation(Dictionary<Variable, int> notation, ref int variableCount)
         {
-            throw new NotImplementedException();
+            return new LetExpression((Variable)Variable._makeNotation(notation, ref variableCount), Left._makeNotation(notation, ref variableCount), Right._makeNotation(notation, ref variableCount));
         }
 
         public override string ToString()
         {
-            return Variable.ToString() + " = " + Left.ToString() + " in " + Right.ToString();
+            return "(" + Variable.ToString() + " = " + Left.ToString() + " in " + Right.ToString() + ")";
         }
     }
 }

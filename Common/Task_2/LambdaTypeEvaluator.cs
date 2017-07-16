@@ -12,7 +12,7 @@ namespace Task_2
     public class LambdaTypeEvaluator
     {
         private LambdaExpression lambda;
-        private Dictionary<Variable, IType> variableType;
+        private Dictionary<Variable, IType> Context = new Dictionary<Variable, IType>();
         public LambdaTypeEvaluator(LambdaExpression lambda)
         {
             this.lambda = lambda;
@@ -21,14 +21,20 @@ namespace Task_2
         public IType GetLambdaType()
         {
             HashSet<Equation> equations;
-            variableType = new Dictionary<Variable, IType>();
+            var variableType = new Dictionary<Variable, IType>();
             IType type = CalculateType(lambda, out equations, variableType);
 
             var result = new Unificator(equations).Solve();
+
+
+            foreach (var var in variableType.Keys)
+            {
+                Context[var] = Subst(variableType[var], result);
+            }
             return Subst(type, result);
         }
     
-        private IType Subst(IType expr, Dictionary<SingleType, IType>  map)
+        public static IType Subst(IType expr, Dictionary<SingleType, IType>  map)
         {
             if (expr is SingleType)
             {
@@ -45,7 +51,7 @@ namespace Task_2
                     return new Implication(left, right);
                 }
                 return impl;
-            } else
+            } else 
             {
                 throw new Exception("Unsupported type");
             }
@@ -53,7 +59,7 @@ namespace Task_2
 
         public void PrintContext(StreamWriter sw)
         {
-            foreach (var kvp in variableType)
+            foreach (var kvp in Context)
             {
                 sw.WriteLine(kvp.Key + " : " + kvp.Value);
             }

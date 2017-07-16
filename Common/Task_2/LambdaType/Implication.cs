@@ -32,5 +32,10 @@ namespace Task_2.LambdaType
             if (other == null) return false;
             return (other.Left.Equals(Left) && other.Right.Equals(Right));
         }
+
+        public IType Clone()
+        {
+            return new Implication(Left.Clone(), Right.Clone());
+        }
     }
 }

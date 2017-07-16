@@ -8,5 +8,6 @@ namespace Task_2.LambdaType
 {
     public interface IType
     {
+        IType Clone();
     }
 }

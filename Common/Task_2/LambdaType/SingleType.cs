@@ -30,5 +30,10 @@ namespace Task_2.LambdaType
         {
             return Name;
         }
+
+        public IType Clone()
+        {
+            return new SingleType(Name);
+        }
     }
 }

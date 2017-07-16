@@ -36,7 +36,7 @@ namespace Common.LambdaElements
 
         public override LambdaExpression GetNotation()
         {
-            return new Variable("a0");
+            return this;
         }
 
         internal override LambdaExpression _makeNotation(Dictionary<Variable, int> notation, ref int variableCount)
@@ -44,8 +44,7 @@ namespace Common.LambdaElements
 
             if (!notation.ContainsKey(this))
             {
-                notation[this] = variableCount++;
-                return new Variable("a" + notation[this].ToString());
+                return this;
             }
             return new Variable("a" + notation[this].ToString());
         }

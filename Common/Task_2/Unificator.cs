@@ -25,26 +25,42 @@ namespace Task_2
                 isChanged = false;
                 var newEquations = new HashSet<Equation>();
 
-                /// first step
-                foreach (var eq in equations)
+                //TODO: it's only placeholder fix!
+                bool isChanged2 = true;
+                while (isChanged2)
                 {
-                    if (!(eq.Left is SingleType) && eq.Right is SingleType)
+                    isChanged2 = false;
+                    /// first step
+                    foreach (var eq in equations)
                     {
-                        isChanged = true;
-                        newEquations.Add(new Equation(eq.Right, eq.Left));
-                    } else if (eq.Left.Equals(eq.Right))
-                    {
-                        isChanged = true;
-                    } else if (eq.Left is Implication && eq.Right is Implication)
-                    {
-                        isChanged = true;
-                        var left = eq.Left as Implication; var right = eq.Right as Implication;
-                        newEquations.Add(new Equation(left.Left, right.Left));
-                        newEquations.Add(new Equation(left.Right, right.Right));
+                        if (!(eq.Left is SingleType) && eq.Right is SingleType)
+                        {
+                            isChanged = true;
+                            isChanged2 = true;
+                            newEquations.Add(new Equation(eq.Right, eq.Left));
+                        }
+                        else if (eq.Left.Equals(eq.Right))
+                        {
+                            isChanged = true;
+                            isChanged2 = true;
+                        }
+                        else if (eq.Left is Implication && eq.Right is Implication)
+                        {
+                            isChanged = true;
+                            isChanged2 = true;
+                            var left = eq.Left as Implication; var right = eq.Right as Implication;
+                            newEquations.Add(new Equation(left.Left, right.Left));
+                            newEquations.Add(new Equation(left.Right, right.Right));
+                        }
+                        else
+                        {
+                            newEquations.Add(eq);
+                        }
                     }
-                    else
+                    if (isChanged2)
                     {
-                        newEquations.Add(eq);
+                        equations = newEquations;
+                        newEquations = new HashSet<Equation>();
                     }
                 }
 
