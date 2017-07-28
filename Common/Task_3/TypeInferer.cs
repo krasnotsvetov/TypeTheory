@@ -22,7 +22,7 @@ namespace Task_3
 
         public TypeInferer(LambdaExpression expression)
         {
-            this.expression = expression;
+            this.expression = expression.GetNotation();
         }
 
         public IType GetLambdaType()
@@ -122,7 +122,7 @@ namespace Task_3
 
                 var type = _GetLambdaType(let.Left, context, out substs1);
 
-                var newContext = Merge(substs1, context);
+                var newContext = Merge(context, substs1);
                 var variableType = ConnectAllFreeVariables(type, newContext);
                 var variable = new SingleType(let.Variable.Name);
                 if (newContext.ContainsKey(variable))
@@ -188,7 +188,7 @@ namespace Task_3
             } else if (expr is Universal)
             {
                 var un = expr as Universal;
-                Debug.Assert(connectedVariables.Contains(un.Variable));
+                Debug.Assert(!connectedVariables.Contains(un.Variable));
                 connectedVariables.Add(un.Variable);
                 var rv = GetFreeVariables(un.Expression, connectedVariables);
                 connectedVariables.Remove(un.Variable);

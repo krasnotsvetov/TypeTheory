@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.LambdaElements;
 using Task_2;
 
 namespace Task_3
@@ -19,7 +20,26 @@ namespace Task_3
             {
                 try
                 {
-                    var ev = new TypeInferer(Lambda.Parse(input));
+									  var id = new Abstraction(new Variable("x"), new Variable("x"));
+										var fst = new Abstraction(new Variable("x"), new Abstraction(new Variable("y"), new Variable("x") ) );
+
+										var lambda = new LetExpression(
+						          new Variable("id"), 
+						          id,
+						          new LetExpression(
+							          new Variable("fst"), 
+							          fst,
+							          new Application(
+								          new Application(
+									          new Variable("fst"), 
+									          new Application(new Variable("id"), new Variable("x"))
+								          ), 
+								          new Application(new Variable("id"), new Variable("y"))
+							          )
+						          )
+					          );
+
+										var ev = new TypeInferer(Lambda.Parse(input));
 
                     sw.WriteLine(ev.GetLambdaType());
                     ev.PrintContext(sw);

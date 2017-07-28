@@ -51,7 +51,23 @@ namespace Task_2
                     return new Implication(left, right);
                 }
                 return impl;
-            } else 
+            } else if (expr is Universal)
+            {
+	              var universal = expr as Universal;
+								if (map.ContainsKey(universal.Variable))
+								{
+										return universal;
+								}
+								else
+								{
+										var e = Subst(universal.Expression, map);
+										if (e == universal.Expression)
+										{
+											return expr;
+										}
+										return new Universal(universal.Variable, e);
+								}
+            } else
             {
                 throw new Exception("Unsupported type");
             }
