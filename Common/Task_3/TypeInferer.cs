@@ -225,9 +225,8 @@ namespace Task_3
             connectedVariables = new List<SingleType>();
             if (expr is Universal)
             {
-                var cv = new List<SingleType>();
-                var result = RemoveQuantifiers((expr as Universal).Expression,out cv);
-                connectedVariables.AddRange(cv);
+                var result = RemoveQuantifiers((expr as Universal).Expression,out connectedVariables);
+                connectedVariables.Add((expr as Universal).Variable);
                 return result;
             } else
             {
