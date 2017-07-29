@@ -40,11 +40,18 @@ namespace Task_3
 
             foreach (var kvp in substs)
             {
-                equations.Add(new Equation(kvp.Key, kvp.Value));
+	            if (!(kvp.Value is Universal))
+	            {
+		            equations.Add(new Equation(kvp.Key, kvp.Value));
+	            }
             }
 
             Context = new Unificator(equations).Solve();
 
+						foreach (var kvp in substs)
+						{
+							if (kvp.Value is Universal) Context[kvp.Key] = kvp.Value;
+						}
             return type; 
         }
 
@@ -76,10 +83,13 @@ namespace Task_3
                     return type;
                 } else
                 {
-                    var type = GetNewType();
-                    globalContext[new SingleType((expr as Variable).Name)] = type;
+										//create context
+										var v = new SingleType((expr as Variable).Name);
+										if (globalContext.ContainsKey(v)) return globalContext[v];
+										var type = GetNewType();
+										globalContext[v] = new Universal(type, type);
                     FreeVariables.Add(new SingleType((expr as Variable).Name));
-                    return type;
+                    return _GetLambdaType(expr, new Dictionary<SingleType, IType>() { {v, globalContext[v]}}, out substs);
                 }
             } 
             if (expr is Application)
@@ -88,7 +98,7 @@ namespace Task_3
 
                 var substs1 = new Dictionary<SingleType, IType>();
                 var type1 = _GetLambdaType(appl.Left, context, out substs1);
-                var newContext = Merge(context, substs1);
+									var newContext = Merge(context, substs1);
 
                 var substs2 = new Dictionary<SingleType, IType>();
                 var type2 = _GetLambdaType(appl.Right, newContext, out substs2);
@@ -110,12 +120,14 @@ namespace Task_3
                 var variable = new SingleType(abstr.Variable.Name);
 
                 var beta = GetNewType();
-                newContext[variable] = beta; 
+                newContext[variable] = beta;
 
-                var type1 = _GetLambdaType(abstr.Expression, newContext, out substs);
+
+
+								var type1 = _GetLambdaType(abstr.Expression, newContext, out substs);
                 return new Implication(LambdaTypeEvaluator.Subst(beta, substs), type1);
             }
-            if (expr is LetExpression)
+							if (expr is LetExpression)
             {
                 var let = expr as LetExpression;
                 var substs1 = new Dictionary<SingleType, IType>();
@@ -134,10 +146,11 @@ namespace Task_3
 
                 newContext[variable] = variableType;
 
-                var substs2 = new Dictionary<SingleType, IType>();
+
+								var substs2 = new Dictionary<SingleType, IType>();
                 var type2 = _GetLambdaType(let.Right, newContext, out substs2);
                 substs = Merge(substs1, substs2);
-                return type2;
+								return type2;
             }
 
             throw new NotImplementedException("Type of expr is not supported");
