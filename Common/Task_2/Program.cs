@@ -18,7 +18,7 @@ namespace Task_2
             {
                 try
                 {
-                    var ev = new LambdaTypeEvaluator(Lambda.Parse(input));
+                    var ev = new LambdaTypeEvaluator(Lambda.Parse(input).GetNotation());
 
                     sw.WriteLine(ev.GetLambdaType());
                     ev.PrintContext(sw);

@@ -39,7 +39,8 @@ namespace Task_2
             if (expr is SingleType)
             {
                 var singleType = expr as SingleType;
-                if (map.ContainsKey(singleType)) return map[singleType];
+                if (map.ContainsKey(singleType))
+                  return map[singleType];
                 return expr;
             } else if (expr is Implication)
             {
@@ -87,20 +88,10 @@ namespace Task_2
             {
                 var abstraction = lambda as Abstraction;
                 IType prev = null;
-                if (type.ContainsKey(abstraction.Variable))
-                {
-                    prev = type[abstraction.Variable];
-                }
 
-                var variableType = type[abstraction.Variable] = new SingleType(NextName());
+                var variableType = type[abstraction.Variable] = new SingleType("'t" + abstraction.Variable.Name);
                 var exprType = CalculateType(abstraction.Expression, out equations, type);
-                if (prev != null)
-                {
-                    type[abstraction.Variable] = prev;
-                } else
-                {
-                    type.Remove(abstraction.Variable);
-                }
+
                 return new Implication(variableType, exprType);
                
             } else if (lambda is Application)
@@ -124,13 +115,10 @@ namespace Task_2
             {
                 var variable = lambda as Variable;
                 equations = new HashSet<Equation>();
-                if (!type.ContainsKey(variable))
-                {
-                    type[variable] = new SingleType(NextName());
-                }
+                type[variable] = new SingleType("'t" + variable.Name);
                 return type[variable];
             }
-            throw new Exception();
+            throw new Exception("Unsupported type");
         }
 
         int name = 0;

@@ -1,1 +1,1 @@
-﻿\x.(y z)
+﻿let sq = (\f.\x.f (x)) in sq sq
